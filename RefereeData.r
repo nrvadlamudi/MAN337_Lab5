@@ -21,20 +21,22 @@ RefData <- NFLGameData %>%
     filter(referee != "") %>%
     arrange(desc(home_win_pct));
 
-print(RefData, n=Inf);
+print(RefData);
 
 # plot ref data as a bar chart with their names on the x axis and home win percentage on the y axis
-ggp <- ggplot(RefData, aes(x = reorder(referee, home_win_pct), y = home_win_pct)) + 
+ggp <- ggplot(RefData, aes(x = reorder(referee, home_win_pct), y = home_win_pct, fill = home_win_pct)) + 
   geom_bar(stat = "identity") +
   labs(x = "Referee", y = "Home Win Percentage") +
   # rotate chart 90 degrees
     coord_flip() +
-    # increase the x axis tick spacing
-    scale_x_discrete(expand = c(0, 1)) +
     # add a title
     labs(title = "Home Win Percentage by Referee") +
     # add a horizontal line at 50%
-    geom_hline(yintercept = 50, linetype = "dashed", color = "red");
+    geom_hline(yintercept = 50, linetype = "dashed", color = "red") + 
+    # scale fill gradient
+    scale_fill_gradient(low = "red", high = "green");
 
 
 plot(ggp);
+# save the plot to a file
+ggsave("RefereeData.png", ggp, width = 10, height = 10);
